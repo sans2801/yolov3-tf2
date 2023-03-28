@@ -36,8 +36,8 @@ def build_example(annotation, class_map):
     difficult_obj = []
     if 'object' in annotation:
         for obj in annotation['object']:
-            difficult = bool(int(obj['difficult']))
-            difficult_obj.append(int(difficult))
+            # difficult = bool(int(obj['difficult']))
+            # difficult_obj.append(int(difficult))
 
             xmin.append(float(obj['bndbox']['xmin']) / width)
             ymin.append(float(obj['bndbox']['ymin']) / height)
@@ -45,8 +45,8 @@ def build_example(annotation, class_map):
             ymax.append(float(obj['bndbox']['ymax']) / height)
             classes_text.append(obj['name'].encode('utf8'))
             classes.append(class_map[obj['name']])
-            truncated.append(int(obj['truncated']))
-            views.append(obj['pose'].encode('utf8'))
+            # truncated.append(int(obj['truncated']))
+            # views.append(obj['pose'].encode('utf8'))
 
     example = tf.train.Example(features=tf.train.Features(feature={
         'image/height': tf.train.Feature(int64_list=tf.train.Int64List(value=[height])),
@@ -64,9 +64,9 @@ def build_example(annotation, class_map):
         'image/object/bbox/ymax': tf.train.Feature(float_list=tf.train.FloatList(value=ymax)),
         'image/object/class/text': tf.train.Feature(bytes_list=tf.train.BytesList(value=classes_text)),
         'image/object/class/label': tf.train.Feature(int64_list=tf.train.Int64List(value=classes)),
-        'image/object/difficult': tf.train.Feature(int64_list=tf.train.Int64List(value=difficult_obj)),
-        'image/object/truncated': tf.train.Feature(int64_list=tf.train.Int64List(value=truncated)),
-        'image/object/view': tf.train.Feature(bytes_list=tf.train.BytesList(value=views)),
+        # 'image/object/difficult': tf.train.Feature(int64_list=tf.train.Int64List(value=difficult_obj)),
+        # 'image/object/truncated': tf.train.Feature(int64_list=tf.train.Int64List(value=truncated)),
+        # 'image/object/view': tf.train.Feature(bytes_list=tf.train.BytesList(value=views)),
     }))
     return example
 
@@ -93,7 +93,7 @@ def main(_argv):
 
     writer = tf.io.TFRecordWriter(FLAGS.output_file)
     image_list = open(os.path.join(
-        FLAGS.data_dir, 'ImageSets', 'Main', '%s.txt' % FLAGS.split)).read().splitlines()
+        FLAGS.data_dir, 'ImageSets', 'Main', 'ripe.txt')).read().splitlines()
     logging.info("Image list loaded: %d", len(image_list))
     for name in tqdm.tqdm(image_list):
         annotation_xml = os.path.join(
